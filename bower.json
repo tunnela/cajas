@@ -1,0 +1,23 @@
+{
+  "name": "cajas",
+  "description": "CSS Animated JavaScript Slider",
+  "homepage": "https://github.com/tunnela/cajas",
+  "authors": [
+    "Lauri Tunnela <lauri@tunne.la> (http://tunne.la)"
+  ],
+  "main": "cajas.min.js",
+  "keywords": [
+    "animated"
+    "slider",
+    "css",
+    "javascript",
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
