@@ -1,2 +1,2 @@
-# cajas
+# Cajas
 CSS Animated JavaScript Slider
