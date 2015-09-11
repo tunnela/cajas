@@ -5,10 +5,10 @@
   "homepage": "https://github.com/tunnela/cajas",
   "author": "Lauri Tunnela <lauri@tunne.la> (http://tunne.la)",
   "keywords": [
-    "inview",
-    "detect",
-    "jquery",
-    "zepto"
+    "animated",
+    "slider",
+    "css",
+    "javascript"
   ],
   "devDependencies": {
     "grunt": "~0.4.5",

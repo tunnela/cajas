@@ -7,10 +7,10 @@
   ],
   "main": "cajas.min.js",
   "keywords": [
-    "animated"
+    "animated",
     "slider",
     "css",
-    "javascript",
+    "javascript"
   ],
   "license": "MIT",
   "ignore": [
