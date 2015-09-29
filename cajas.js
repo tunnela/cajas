@@ -88,7 +88,7 @@
 					if (typeof slides[group] === 'undefined') {
 						slides[group] = [];
 					}
-					if (childElement.getAttribute('cajas-active') !== null) {
+					if (childElement.getAttribute('cajas-in') !== null) {
 						options[group].index = slideIndex;
 					}
 					item = slides[group][slideIndex] = { 
@@ -118,18 +118,52 @@
 	if (!slides) {
 		return;
 	}
-	var	inActivate = function(group) {
-		var slideCount = slides[group].length, element;
+	var	setAttrs = function(group, nextIndex) {
+		var slideCount = slides[group].length, element,
+		currentIndex = options[group].index;
 
 		for (var i = 0; i < slideCount; i++) {
 			element = slides[group][i].element;
-			element.removeAttribute('cajas-active');
-			element.removeAttribute('cajas-inactive');
 
-			if (typeof controls[group][i] !== 'undefined') {
-				element = controls[group][i].element;
+			if (i === currentIndex && currentIndex != nextIndex) {
 				element.removeAttribute('cajas-active');
+				element.removeAttribute('cajas-in');
+				element.setAttribute('cajas-inactive', true);
+				element.setAttribute('cajas-out', true);
+
+				if (typeof controls[group][i] !== 'undefined') {
+					element = controls[group][i].element;
+					element.removeAttribute('cajas-active');
+					element.removeAttribute('cajas-in');
+					element.setAttribute('cajas-inactive', true);
+					element.setAttribute('cajas-out', true);
+				}
+			} else if (i === nextIndex) {
 				element.removeAttribute('cajas-inactive');
+				element.removeAttribute('cajas-out');
+				element.setAttribute('cajas-active', true);
+				element.setAttribute('cajas-in', true);
+
+				if (typeof controls[group][i] !== 'undefined') {
+					element = controls[group][i].element;
+					element.removeAttribute('cajas-inactive');
+					element.removeAttribute('cajas-out');
+					element.setAttribute('cajas-active', true);
+					element.setAttribute('cajas-in', true);
+				}
+			} else {
+				element.removeAttribute('cajas-in');
+				element.removeAttribute('cajas-out');
+				element.removeAttribute('cajas-active');
+				element.setAttribute('cajas-inactive', true);
+
+				if (typeof controls[group][i] !== 'undefined') {
+					element = controls[group][i].element;
+					element.removeAttribute('cajas-in');
+					element.removeAttribute('cajas-out');
+					element.removeAttribute('cajas-active');
+					element.setAttribute('cajas-inactive', true);
+				}
 			}
 		}
 	},
@@ -138,36 +172,48 @@
 		clearTimeout(timer);
 		timer = null;
 	},
-	onClick = function() {
-		var group = this.group;	
+	onClick = function(animate) {
+		var group = this.group,
+		animate = typeof animate === 'undefined' ? true : animate;
 
 		if (timer !== null && options[group].index === this.index) {
 			return;
 		}
 		resetTimer();
-
-		inActivate(group);
-
-		var element, currentIndex = options[group].index;
+		setAttrs(group, this.index);
 		options[group].index = this.index;
 
-		if (currentIndex !== null) {
-			element = slides[group][currentIndex].element;
-			element.removeAttribute('cajas-active');
-			element.setAttribute('cajas-inactive', true);
+		// var element, currentIndex = options[group].index;
+		// options[group].index = this.index;
 
-			if (typeof controls[group][currentIndex] !== 'undefined') {
-				element = controls[group][currentIndex].element;
-				element.removeAttribute('cajas-active');
-				element.setAttribute('cajas-inactive', true);
-			}
-		}
-		element = this.element;
-		element.setAttribute('cajas-active', true);
+		// if (currentIndex !== null) {
+		// 	element = slides[group][currentIndex].element;
+		// 	element.removeAttribute('cajas-in');
 
-		if (typeof controls[group][this.index] !== 'undefined') {
-			element = controls[group][this.index].element;
-			element.setAttribute('cajas-active', true);
+		// 	if (currentIndex != this.index) {
+		// 		element.setAttribute('cajas-out', true);
+		// 	}
+		// 	if (typeof controls[group][currentIndex] !== 'undefined') {
+		// 		element = controls[group][currentIndex].element;
+		// 		element.removeAttribute('cajas-in');
+
+		// 		if (currentIndex != this.index) {
+		// 			element.setAttribute('cajas-out', true);
+		// 		}
+		// 	}
+		// }
+		// element = this.element;
+		// element.setAttribute('cajas-in', true);
+		// element.removeAttribute('cajas-inactive');
+		// element.setAttribute('cajas-active', true);
+
+		// if (typeof controls[group][this.index] !== 'undefined') {
+		// 	element = controls[group][this.index].element;
+		// 	element.setAttribute('cajas-in', true);
+		// 	element.setAttribute('cajas-active', true);
+		// }
+		if (!animate) {
+			return;
 		}
 		var nextSlide;
 
@@ -193,7 +239,7 @@
 				callable();
 			}
 			if (typeof controls[i] !== 'undefined' && typeof controls[i][j] !== 'undefined') {
-				addEvent(controls[i][j].element, 'click', onClick.bind(slides[i][j]));
+				addEvent(controls[i][j].element, 'click', onClick.bind(slides[i][j], slideCount > 1));
 			}
 		}
 	}
